@@ -1,128 +1,59 @@
-# Gesture Based System Control
+# Gesture-Based System Control
 
-## 📌 Project Overview
+A Windows-only computer-vision prototype that uses MediaPipe hand landmarks to
+switch between volume, brightness, and scrolling modes. OpenCV reads the
+webcam; PyAutoGUI and Windows audio/brightness libraries perform the selected
+desktop actions.
 
-Gesture Based System Control is a computer vision application that allows users to control system functions using hand gestures detected through a webcam.
+## Status and safety
 
-Instead of using traditional input devices such as a mouse or keyboard, this system uses **hand gestures to control system volume, screen brightness, and scrolling**.
+This is an early prototype, not a hardened accessibility product. Running it
+opens the camera and can change system volume, change display brightness, or
+scroll the active window. Test in a controlled environment, keep the emergency
+quit key available, and review every dependency before use. No automated tests
+are provided.
 
-The project uses **MediaPipe for hand tracking** and **OpenCV for real-time video processing**, enabling natural human-computer interaction.
+## Requirements
 
----
+- Windows with a working webcam.
+- Python environment compatible with the installed MediaPipe and Pycaw wheels.
+- Dependencies in `requirements.txt`.
 
-## 🎯 Features
-
-* 🎵 Control **system volume** using finger distance gestures
-* 💡 Adjust **screen brightness** using hand gestures
-* 📜 **Scroll up and down** using palm position
-* 🖐 Real-time **hand detection and tracking**
-* 🔄 Automatic **gesture mode switching**
-* ⚡ Fast and responsive **real-time processing**
-
----
-
-## ✋ Gesture Controls
-
-| Gesture           | Function                             |
-| ----------------- | ------------------------------------ |
-| 👍 Thumbs Up      | Activate **Brightness Control Mode** |
-| ✌ Scissor Gesture | Activate **Volume Control Mode**     |
-| ✊ Fist Gesture    | Activate **Scroll Mode**             |
-
----
-
-## 🛠 Technologies Used
-
-* **Python**
-* **OpenCV**
-* **MediaPipe**
-* **NumPy**
-* **PyAutoGUI**
-* **PyCaw (Volume Control)**
-* **Screen Brightness Control**
-
----
-
-## 📂 Project Structure
-
-```
-Gesture-Based-System-Control
-│
-├── prototype1.py
-├── requirements.txt
-└── README.md
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+python -m pip install -r requirements.txt
 ```
 
----
+## Run
 
-## ⚙ Installation
+The published repository contains the original prototype:
 
-### 1️⃣ Clone the Repository
-
-```
-git clone https://github.com/your-username/gesture-based-system-control.git
-cd gesture-based-system-control
-```
-
-### 2️⃣ Install Required Libraries
-
-```
-pip install opencv-python mediapipe numpy pyautogui screen-brightness-control pycaw comtypes
-```
-
----
-
-## ▶ Running the Project
-
-Run the following command:
-
-```
+```powershell
 python prototype1.py
 ```
 
-Your webcam will open and start detecting hand gestures.
+Press `q` while the OpenCV window is focused to exit. The prototype uses
+thumb/index/middle/ring/pinky landmark heuristics to activate modes. A second
+experimental variant exists in the local workspace but is intentionally not
+published because its timing/state behavior is incomplete.
 
-Press **Q** to exit the program.
+## Architecture
 
----
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the camera, landmark,
+mode, and operating-system side-effect flow.
 
-## 🖥 How It Works
+## Verification
 
-1. The webcam captures live video.
-2. MediaPipe detects **hand landmarks (21 points)**.
-3. The system identifies specific **hand gestures**.
-4. Each gesture activates a **control mode**:
+```powershell
+python -m py_compile prototype1.py prototype2.py
+```
 
-   * Volume
-   * Brightness
-   * Scroll
-5. The corresponding system function is adjusted in real time.
+## Limitations
 
----
-
-## 🚀 Future Improvements
-
-* Add **more gesture controls**
-* Support **multi-hand gestures**
-* Improve gesture accuracy using **deep learning**
-* Convert the project into a **standalone Windows application**
-
----
-
-## 👨‍💻 Authors
-
-**Raja Varun**
-B.Tech Computer Science (Data Science)
-
-**Madhavaram Vineel**
-
----
-
-## 🎓 Academic Project
-
-This project was developed as a **Real-Time Project for B.Tech Computer Science (Data Science)**.
-
-Guided by:
-
-* **K. Kotaiah Swamy**
-* **Mr. Sunil Moses**
+- Gesture thresholds are hard-coded and may vary by camera, hand position, and
+  lighting.
+- There is no permission layer, configuration file, calibration flow, or unit
+  test suite.
+- `prototype2.py` contains experimental timing/state behavior and should not be
+  described as production-ready.
